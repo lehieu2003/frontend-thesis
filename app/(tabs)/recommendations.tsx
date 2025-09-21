@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
@@ -46,39 +45,38 @@ const categories = [
 export default function RecommendationsScreen() {
   const [activeCategory, setActiveCategory] = useState('for-you');
   const { isDark } = useTheme();
-  const styles = getStyles(isDark);
 
   const renderBookCard = ({ item }: { item: typeof personalizedBooks[0] }) => (
-    <View style={styles.bookCard}>
-      <Image source={{ uri: item.coverUrl }} style={styles.bookCover} />
-      <View style={styles.bookInfo}>
-        <Text style={styles.bookTitle} numberOfLines={2}>
+    <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 mb-4 shadow-sm`}>
+      <Image source={{ uri: item.coverUrl }} className="w-full h-48 rounded-lg mb-3" />
+      <View className="mb-3">
+        <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`} numberOfLines={2}>
           {item.title}
         </Text>
-        <Text style={styles.bookAuthor} numberOfLines={1}>
+        <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`} numberOfLines={1}>
           by {item.author}
         </Text>
-        <View style={styles.ratingContainer}>
+        <View className="flex-row items-center mb-2">
           <Ionicons name="star" size={14} color="#F59E0B" />
-          <Text style={styles.rating}>{item.rating}</Text>
+          <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1`}>{item.rating}</Text>
         </View>
-        <View style={styles.genreContainer}>
+        <View className="flex-row gap-1.5">
           {item.genre.slice(0, 2).map((genre) => (
-            <View key={genre} style={styles.genreTag}>
-              <Text style={styles.genreText}>{genre}</Text>
+            <View key={genre} className="bg-blue-100 px-2 py-1 rounded-full">
+              <Text className="text-blue-800 text-xs font-medium">{genre}</Text>
             </View>
           ))}
         </View>
       </View>
-      <View style={styles.recommendationInfo}>
-        <View style={styles.reasonContainer}>
+      <View className="bg-purple-50 rounded-lg p-3">
+        <View className="flex-row items-start mb-2">
           <Ionicons name="sparkles" size={12} color="#8B5CF6" />
-          <Text style={styles.reasonText} numberOfLines={2}>
+          <Text className="text-purple-700 text-xs ml-1.5 flex-1" numberOfLines={2}>
             {item.reason}
           </Text>
         </View>
-        <View style={styles.matchContainer}>
-          <View style={styles.matchStars}>
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row gap-0.5">
             {[...Array(5)].map((_, i) => (
               <Ionicons
                 key={i}
@@ -88,42 +86,45 @@ export default function RecommendationsScreen() {
               />
             ))}
           </View>
-          <Text style={styles.matchText}>{item.match}% match</Text>
+          <Text className="text-gray-600 text-xs font-medium">{item.match}% match</Text>
         </View>
       </View>
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.headerTitleContainer}>
+      <View className="flex-row justify-between items-start px-5 py-4">
+        <View className="flex-1">
+          <View className="flex-row items-center mb-2">
             <Ionicons name="sparkles" size={28} color="#8B5CF6" />
-            <Text style={styles.headerTitle}>For You</Text>
+            <Text className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} ml-3`}>For You</Text>
           </View>
-          <Text style={styles.headerSubtitle}>
+          <Text className={`text-base ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-5`}>
             Discover books tailored just for you, powered by AI
           </Text>
         </View>
-        <TouchableOpacity style={styles.refreshButton}>
+        <TouchableOpacity className="p-2">
           <Ionicons name="refresh" size={20} color="#6B7280" />
         </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Categories */}
-        <View style={styles.categoriesContainer}>
+        <View className="mb-6">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.categories}>
+            <View className="flex-row px-5 gap-2">
               {categories.map((category) => (
                 <TouchableOpacity
                   key={category.id}
-                  style={[
-                    styles.categoryButton,
-                    activeCategory === category.id && styles.activeCategoryButton,
-                  ]}
+                  className={`flex-row items-center px-4 py-2 rounded-full border ${
+                    activeCategory === category.id
+                      ? 'bg-purple-100 border-purple-500'
+                      : isDark
+                      ? 'bg-gray-800 border-gray-700'
+                      : 'bg-white border-gray-200'
+                  }`}
                   onPress={() => setActiveCategory(category.id)}
                 >
                   <Ionicons
@@ -138,15 +139,18 @@ export default function RecommendationsScreen() {
                     }
                   />
                   <Text
-                    style={[
-                      styles.categoryText,
-                      activeCategory === category.id && styles.activeCategoryText,
-                    ]}
+                    className={`text-sm font-medium ml-1.5 mr-2 ${
+                      activeCategory === category.id
+                        ? 'text-purple-700'
+                        : isDark
+                        ? 'text-gray-400'
+                        : 'text-gray-600'
+                    }`}
                   >
                     {category.label}
                   </Text>
-                  <View style={styles.categoryCount}>
-                    <Text style={styles.categoryCountText}>{category.count}</Text>
+                  <View className="bg-white/50 px-1.5 py-0.5 rounded-full">
+                    <Text className="text-gray-600 text-xs font-semibold">{category.count}</Text>
                   </View>
                 </TouchableOpacity>
               ))}
@@ -155,20 +159,20 @@ export default function RecommendationsScreen() {
         </View>
 
         {/* AI Insights */}
-        <View style={styles.insightsContainer}>
-          <View style={styles.insightsHeader}>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-blue-50'} mx-5 rounded-xl p-4 mb-6`}>
+          <View className="flex-row items-center mb-2">
             <Ionicons name="sparkles" size={16} color="#8B5CF6" />
-            <Text style={styles.insightsTitle}>AI Insights</Text>
+            <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'} ml-2`}>AI Insights</Text>
           </View>
-          <Text style={styles.insightsText}>
-            Based on your reading of <Text style={styles.boldText}>24 books</Text> and preferences for{' '}
-            <Text style={styles.boldText}>Fiction, Science Fiction, and Mystery</Text>, we've found books that match your taste for character-driven narratives.
+          <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-5`}>
+            Based on your reading of <Text className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>24 books</Text> and preferences for{' '}
+            <Text className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Fiction, Science Fiction, and Mystery</Text>, we've found books that match your taste for character-driven narratives.
           </Text>
         </View>
 
         {/* Recommendations */}
-        <View style={styles.recommendationsSection}>
-          <Text style={styles.sectionTitle}>
+        <View className="px-5 mb-8">
+          <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
             {categories.find(c => c.id === activeCategory)?.label} ({personalizedBooks.length} books)
           </Text>
           <FlatList
@@ -181,26 +185,26 @@ export default function RecommendationsScreen() {
         </View>
 
         {/* Reading Preferences */}
-        <View style={styles.preferencesContainer}>
-          <Text style={styles.preferencesTitle}>Your Reading Preferences</Text>
-          <View style={styles.preferencesGrid}>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Favorite Genres</Text>
-              <View style={styles.genreList}>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} mx-5 rounded-xl p-5 mb-8 shadow-sm`}>
+          <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>Your Reading Preferences</Text>
+          <View className="gap-4">
+            <View className="mb-2">
+              <Text className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>Favorite Genres</Text>
+              <View className="flex-row flex-wrap gap-1.5">
                 {['Fiction', 'Science Fiction', 'Mystery', 'Romance'].map((genre) => (
-                  <View key={genre} style={styles.preferenceGenreTag}>
-                    <Text style={styles.preferenceGenreText}>{genre}</Text>
+                  <View key={genre} className="bg-blue-100 px-2 py-1 rounded-full">
+                    <Text className="text-blue-800 text-xs font-medium">{genre}</Text>
                   </View>
                 ))}
               </View>
             </View>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Preferred Length</Text>
-              <Text style={styles.preferenceValue}>Medium (200-400 pages)</Text>
+            <View className="mb-2">
+              <Text className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>Preferred Length</Text>
+              <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Medium (200-400 pages)</Text>
             </View>
-            <View style={styles.preferenceItem}>
-              <Text style={styles.preferenceLabel}>Reading Pace</Text>
-              <Text style={styles.preferenceValue}>2-3 books per month</Text>
+            <View>
+              <Text className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>Reading Pace</Text>
+              <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>2-3 books per month</Text>
             </View>
           </View>
         </View>
@@ -208,250 +212,3 @@ export default function RecommendationsScreen() {
     </SafeAreaView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginLeft: 12,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    lineHeight: 22,
-  },
-  refreshButton: {
-    padding: 8,
-  },
-  categoriesContainer: {
-    marginBottom: 24,
-  },
-  categories: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    gap: 8,
-  },
-  categoryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: isDark ? '#374151' : '#E5E7EB',
-  },
-  activeCategoryButton: {
-    backgroundColor: '#F3E8FF',
-    borderColor: '#8B5CF6',
-  },
-  categoryText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginLeft: 6,
-    marginRight: 8,
-  },
-  activeCategoryText: {
-    color: '#8B5CF6',
-  },
-  categoryCount: {
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  categoryCountText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  insightsContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#F0F9FF',
-    marginHorizontal: 20,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  insightsHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  insightsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginLeft: 8,
-  },
-  insightsText: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    lineHeight: 20,
-  },
-  boldText: {
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  recommendationsSection: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 16,
-  },
-  bookCard: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  bookCover: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  bookInfo: {
-    marginBottom: 12,
-  },
-  bookTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 4,
-  },
-  bookAuthor: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginBottom: 8,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  rating: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginLeft: 4,
-  },
-  genreContainer: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  genreTag: {
-    backgroundColor: '#DBEAFE',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  genreText: {
-    color: '#1D4ED8',
-    fontSize: 10,
-    fontWeight: '500',
-  },
-  recommendationInfo: {
-    backgroundColor: '#F3E8FF',
-    borderRadius: 8,
-    padding: 12,
-  },
-  reasonContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  reasonText: {
-    fontSize: 12,
-    color: '#8B5CF6',
-    marginLeft: 6,
-    flex: 1,
-  },
-  matchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  matchStars: {
-    flexDirection: 'row',
-    gap: 2,
-  },
-  matchText: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-  preferencesContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    marginHorizontal: 20,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 32,
-  },
-  preferencesTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 16,
-  },
-  preferencesGrid: {
-    gap: 16,
-  },
-  preferenceItem: {
-    marginBottom: 8,
-  },
-  preferenceLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 8,
-  },
-  preferenceValue: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  genreList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  preferenceGenreTag: {
-    backgroundColor: '#DBEAFE',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  preferenceGenreText: {
-    color: '#1D4ED8',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-});

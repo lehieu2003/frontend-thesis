@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
@@ -38,49 +37,48 @@ const trendingSearches = ['Science Fiction', 'Self-Help', 'Mystery Thriller', 'R
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const { isDark } = useTheme();
-  const styles = getStyles(isDark);
 
   const renderBookItem = ({ item }: { item: typeof searchResults[0] }) => (
-    <TouchableOpacity style={styles.bookItem}>
-      <Image source={{ uri: item.coverUrl }} style={styles.bookCover} />
-      <View style={styles.bookDetails}>
-        <Text style={styles.bookTitle} numberOfLines={2}>
+    <TouchableOpacity className={`flex-row ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 mb-3 shadow-sm`}>
+      <Image source={{ uri: item.coverUrl }} className="w-15 h-20 rounded-lg mr-4" />
+      <View className="flex-1">
+        <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`} numberOfLines={2}>
           {item.title}
         </Text>
-        <Text style={styles.bookAuthor} numberOfLines={1}>
+        <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-2`} numberOfLines={1}>
           by {item.author}
         </Text>
-        <View style={styles.ratingContainer}>
+        <View className="flex-row items-center mb-2">
           <Ionicons name="star" size={14} color="#F59E0B" />
-          <Text style={styles.rating}>{item.rating}</Text>
+          <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1`}>{item.rating}</Text>
         </View>
-        <View style={styles.genreContainer}>
+        <View className="flex-row gap-1.5">
           {item.genre.slice(0, 2).map((genre) => (
-            <View key={genre} style={styles.genreTag}>
-              <Text style={styles.genreText}>{genre}</Text>
+            <View key={genre} className="bg-blue-100 px-2 py-1 rounded-full">
+              <Text className="text-blue-800 text-xs font-medium">{genre}</Text>
             </View>
           ))}
         </View>
       </View>
-      <TouchableOpacity style={styles.favoriteButton}>
+      <TouchableOpacity className="p-2">
         <Ionicons name="heart-outline" size={20} color="#6B7280" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Search & Explore</Text>
+      <View className="px-5 py-4">
+        <Text className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Search & Explore</Text>
       </View>
 
       {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color="#9CA3AF" style={styles.searchIcon} />
+      <View className="px-5 mb-6">
+        <View className={`flex-row items-center ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl px-4 py-3 shadow-sm`}>
+          <Ionicons name="search" size={20} color="#9CA3AF" className="mr-3" />
           <TextInput
-            style={styles.searchInput}
+            className={`flex-1 text-base ${isDark ? 'text-white' : 'text-gray-900'}`}
             placeholder="Search for books, authors, or genres..."
             placeholderTextColor="#9CA3AF"
             value={searchQuery}
@@ -91,27 +89,27 @@ export default function SearchScreen() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Trending Searches */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
+        <View className="mb-8 px-5">
+          <View className="flex-row items-center mb-4">
             <Ionicons name="trending-up" size={20} color="#F59E0B" />
-            <Text style={styles.sectionTitle}>Trending Searches</Text>
+            <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} ml-2`}>Trending Searches</Text>
           </View>
-          <View style={styles.trendingContainer}>
+          <View className="flex-row flex-wrap gap-2">
             {trendingSearches.map((search) => (
               <TouchableOpacity
                 key={search}
-                style={styles.trendingTag}
+                className="bg-yellow-100 px-3 py-1.5 rounded-full"
                 onPress={() => setSearchQuery(search)}
               >
-                <Text style={styles.trendingText}>{search}</Text>
+                <Text className="text-yellow-800 text-xs font-medium">{search}</Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
 
         {/* Search Results */}
-        <View style={styles.section}>
-          <Text style={styles.resultsTitle}>
+        <View className="px-5 mb-8">
+          <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>
             Search Results ({searchResults.length} books found)
           </Text>
           <FlatList
@@ -124,193 +122,24 @@ export default function SearchScreen() {
         </View>
 
         {/* Quick Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
+        <View className="flex-row justify-between px-5 mb-8">
+          <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 items-center flex-1 mx-1 shadow-sm`}>
             <Ionicons name="book" size={24} color="#3B82F6" />
-            <Text style={styles.statNumber}>12,450</Text>
-            <Text style={styles.statLabel}>Total Books</Text>
+            <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mt-2 mb-1`}>12,450</Text>
+            <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} text-center`}>Total Books</Text>
           </View>
-          <View style={styles.statCard}>
+          <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 items-center flex-1 mx-1 shadow-sm`}>
             <Ionicons name="star" size={24} color="#8B5CF6" />
-            <Text style={styles.statNumber}>4.2</Text>
-            <Text style={styles.statLabel}>Avg Rating</Text>
+            <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mt-2 mb-1`}>4.2</Text>
+            <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} text-center`}>Avg Rating</Text>
           </View>
-          <View style={styles.statCard}>
+          <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 items-center flex-1 mx-1 shadow-sm`}>
             <Ionicons name="trophy" size={24} color="#10B981" />
-            <Text style={styles.statNumber}>156</Text>
-            <Text style={styles.statLabel}>New This Week</Text>
+            <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mt-2 mb-1`}>156</Text>
+            <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} text-center`}>New This Week</Text>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  searchContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 24,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  searchIcon: {
-    marginRight: 12,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  section: {
-    marginBottom: 32,
-    paddingHorizontal: 20,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginLeft: 8,
-  },
-  trendingContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  trendingTag: {
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  trendingText: {
-    color: '#D97706',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  resultsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 16,
-  },
-  bookItem: {
-    flexDirection: 'row',
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  bookCover: {
-    width: 60,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 16,
-  },
-  bookDetails: {
-    flex: 1,
-  },
-  bookTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 4,
-  },
-  bookAuthor: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginBottom: 8,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  rating: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginLeft: 4,
-  },
-  genreContainer: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  genreTag: {
-    backgroundColor: '#DBEAFE',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  genreText: {
-    color: '#1D4ED8',
-    fontSize: 10,
-    fontWeight: '500',
-  },
-  favoriteButton: {
-    padding: 8,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 32,
-  },
-  statCard: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    flex: 1,
-    marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginTop: 8,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    textAlign: 'center',
-  },
-});

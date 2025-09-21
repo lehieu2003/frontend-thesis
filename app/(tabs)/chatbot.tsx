@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -35,7 +34,6 @@ export default function ChatBotScreen() {
   const { isDark } = useTheme();
   const { user } = useAuth();
   const flatListRef = useRef<FlatList>(null);
-  const styles = getStyles(isDark);
 
   useEffect(() => {
     // Auto scroll to bottom when new messages are added
@@ -97,24 +95,30 @@ export default function ChatBotScreen() {
   };
 
   const renderMessage = ({ item }: { item: ChatMessage }) => (
-    <View style={[
-      styles.messageContainer,
-      item.type === 'user' ? styles.userMessageContainer : styles.botMessageContainer
-    ]}>
-      <View style={[
-        styles.messageBubble,
-        item.type === 'user' ? styles.userMessage : styles.botMessage
-      ]}>
-        <Text style={[
-          styles.messageText,
-          item.type === 'user' ? styles.userMessageText : styles.botMessageText
-        ]}>
+    <View className={`px-5 mb-4 ${item.type === 'user' ? 'items-end' : 'items-start'}`}>
+      <View className={`max-w-[80%] px-4 py-3 rounded-2xl ${
+        item.type === 'user' 
+          ? 'bg-blue-500 rounded-br-sm' 
+          : isDark 
+          ? 'bg-gray-800 rounded-bl-sm shadow-sm' 
+          : 'bg-white rounded-bl-sm shadow-sm'
+      }`}>
+        <Text className={`text-base leading-5 mb-1 ${
+          item.type === 'user' 
+            ? 'text-white' 
+            : isDark 
+            ? 'text-white' 
+            : 'text-gray-900'
+        }`}>
           {item.content}
         </Text>
-        <Text style={[
-          styles.timestamp,
-          item.type === 'user' ? styles.userTimestamp : styles.botTimestamp
-        ]}>
+        <Text className={`text-xs opacity-70 ${
+          item.type === 'user' 
+            ? 'text-white text-right' 
+            : isDark 
+            ? 'text-gray-400' 
+            : 'text-gray-600'
+        }`}>
           {formatTime(item.timestamp)}
         </Text>
       </View>
@@ -122,33 +126,33 @@ export default function ChatBotScreen() {
   );
 
   const renderTypingIndicator = () => (
-    <View style={styles.botMessageContainer}>
-      <View style={[styles.messageBubble, styles.botMessage]}>
-        <View style={styles.typingIndicator}>
-          <View style={[styles.typingDot, { animationDelay: '0ms' }]} />
-          <View style={[styles.typingDot, { animationDelay: '150ms' }]} />
-          <View style={[styles.typingDot, { animationDelay: '300ms' }]} />
+    <View className="px-5 mb-4 items-start">
+      <View className={`px-4 py-3 rounded-2xl rounded-bl-sm ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
+        <View className="flex-row items-center py-2">
+          <View className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-gray-400' : 'bg-gray-600'} opacity-40 mr-1`} />
+          <View className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-gray-400' : 'bg-gray-600'} opacity-40 mr-1`} />
+          <View className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-gray-400' : 'bg-gray-600'} opacity-40`} />
         </View>
       </View>
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.botAvatar}>
+      <View className={`flex-row justify-between items-center px-5 py-4 ${isDark ? 'bg-gray-800' : 'bg-white'} border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+        <View className="flex-row items-center">
+          <View className="w-10 h-10 rounded-full bg-blue-500 justify-center items-center mr-3">
             <Ionicons name="chatbubble-ellipses" size={20} color="white" />
           </View>
           <View>
-            <Text style={styles.headerTitle}>AI Book Assistant</Text>
-            <Text style={styles.headerSubtitle}>BookHive AI</Text>
+            <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>AI Book Assistant</Text>
+            <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>BookHive AI</Text>
           </View>
         </View>
-        <View style={styles.onlineIndicator}>
-          <View style={styles.onlineDot} />
-          <Text style={styles.onlineText}>Online</Text>
+        <View className="flex-row items-center">
+          <View className="w-2 h-2 rounded-full bg-green-500 mr-1.5" />
+          <Text className="text-green-500 text-xs font-medium">Online</Text>
         </View>
       </View>
 
@@ -158,8 +162,8 @@ export default function ChatBotScreen() {
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item) => item.id}
-        style={styles.messagesList}
-        contentContainerStyle={styles.messagesContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingVertical: 16 }}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={isTyping ? renderTypingIndicator : null}
       />
@@ -167,11 +171,11 @@ export default function ChatBotScreen() {
       {/* Input */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.inputContainer}
+        className={`${isDark ? 'bg-gray-800' : 'bg-white'} border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} px-5 py-4`}
       >
-        <View style={styles.inputRow}>
+        <View className="flex-row items-end mb-2">
           <TextInput
-            style={styles.textInput}
+            className={`flex-1 border ${isDark ? 'border-gray-700 bg-gray-900 text-white' : 'border-gray-200 bg-gray-50 text-gray-900'} rounded-2xl px-4 py-3 mr-3 max-h-24 text-base`}
             value={input}
             onChangeText={setInput}
             placeholder="Ask me anything about books..."
@@ -180,16 +184,16 @@ export default function ChatBotScreen() {
             maxLength={500}
           />
           <TouchableOpacity
-            style={[styles.sendButton, !input.trim() && styles.sendButtonDisabled]}
+            className={`w-10 h-10 rounded-full bg-blue-500 justify-center items-center ${(!input.trim() || isTyping) ? 'opacity-50' : ''}`}
             onPress={handleSend}
             disabled={!input.trim() || isTyping}
           >
             <Ionicons name="send" size={20} color="white" />
           </TouchableOpacity>
         </View>
-        <View style={styles.inputFooter}>
+        <View className="flex-row items-center justify-center">
           <Ionicons name="sparkles" size={12} color="#8B5CF6" />
-          <Text style={styles.inputFooterText}>
+          <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'} ml-1`}>
             Powered by advanced AI • Book recommendations • Literature insights
           </Text>
         </View>
@@ -197,174 +201,3 @@ export default function ChatBotScreen() {
     </SafeAreaView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: isDark ? '#374151' : '#E5E7EB',
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  botAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#3B82F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  onlineIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  onlineDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#10B981',
-    marginRight: 6,
-  },
-  onlineText: {
-    fontSize: 12,
-    color: '#10B981',
-    fontWeight: '500',
-  },
-  messagesList: {
-    flex: 1,
-  },
-  messagesContent: {
-    paddingVertical: 16,
-  },
-  messageContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
-  userMessageContainer: {
-    alignItems: 'flex-end',
-  },
-  botMessageContainer: {
-    alignItems: 'flex-start',
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 16,
-  },
-  userMessage: {
-    backgroundColor: '#3B82F6',
-    borderBottomRightRadius: 4,
-  },
-  botMessage: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderBottomLeftRadius: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  messageText: {
-    fontSize: 16,
-    lineHeight: 22,
-    marginBottom: 4,
-  },
-  userMessageText: {
-    color: 'white',
-  },
-  botMessageText: {
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  timestamp: {
-    fontSize: 10,
-    opacity: 0.7,
-  },
-  userTimestamp: {
-    color: 'white',
-    textAlign: 'right',
-  },
-  botTimestamp: {
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  typingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  typingDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: isDark ? '#9CA3AF' : '#6B7280',
-    marginHorizontal: 2,
-    opacity: 0.4,
-  },
-  inputContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: isDark ? '#374151' : '#E5E7EB',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginBottom: 8,
-  },
-  textInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: isDark ? '#374151' : '#E5E7EB',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginRight: 12,
-    maxHeight: 100,
-    fontSize: 16,
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#3B82F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sendButtonDisabled: {
-    opacity: 0.5,
-  },
-  inputFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputFooterText: {
-    fontSize: 10,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginLeft: 4,
-  },
-});

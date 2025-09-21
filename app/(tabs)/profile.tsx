@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -16,7 +15,6 @@ import { useAuth } from '../../hooks/useAuth';
 export default function ProfileScreen() {
   const { isDark, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
-  const styles = getStyles(isDark);
 
   const handleLogout = () => {
     Alert.alert(
@@ -53,76 +51,81 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.profileSection}>
-            <View style={styles.avatar}>
+        <View className="flex-row justify-between items-start px-5 py-5">
+          <View className="flex-row items-center flex-1">
+            <View className="w-15 h-15 rounded-full bg-blue-500 justify-center items-center mr-4">
               <Ionicons name="person" size={32} color="white" />
             </View>
-            <View style={styles.profileInfo}>
-              <Text style={styles.userName}>{user?.name || 'Book Lover'}</Text>
-              <Text style={styles.userEmail}>{user?.email}</Text>
-              <Text style={styles.joinDate}>Joined {stats.joinDate}</Text>
+            <View className="flex-1">
+              <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-1`}>{user?.name || 'Book Lover'}</Text>
+              <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} mb-0.5`}>{user?.email}</Text>
+              <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Joined {stats.joinDate}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.editButton}>
+          <TouchableOpacity className="p-2">
             <Ionicons name="create-outline" size={20} color="#3B82F6" />
           </TouchableOpacity>
         </View>
 
         {/* Reading Stats */}
-        <View style={styles.statsContainer}>
-          <Text style={styles.statsTitle}>Reading Statistics</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{stats.booksRead}</Text>
-              <Text style={styles.statLabel}>Books Read</Text>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} mx-5 rounded-2xl p-5 mb-5 shadow-sm`}>
+          <Text className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'} mb-4`}>Reading Statistics</Text>
+          <View className="flex-row flex-wrap justify-between mb-5">
+            <View className="items-center w-[48%] py-3">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">{stats.booksRead}</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Books Read</Text>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{stats.currentlyReading}</Text>
-              <Text style={styles.statLabel}>Currently Reading</Text>
+            <View className="items-center w-[48%] py-3">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">{stats.currentlyReading}</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Currently Reading</Text>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{stats.wantToRead}</Text>
-              <Text style={styles.statLabel}>Want to Read</Text>
+            <View className="items-center w-[48%] py-3">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">{stats.wantToRead}</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Want to Read</Text>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{stats.averageRating}</Text>
-              <Text style={styles.statLabel}>Avg Rating</Text>
+            <View className="items-center w-[48%] py-3">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">{stats.averageRating}</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Avg Rating</Text>
             </View>
           </View>
 
           {/* Reading Goal Progress */}
-          <View style={styles.goalContainer}>
-            <View style={styles.goalHeader}>
-              <Text style={styles.goalTitle}>2024 Reading Goal</Text>
-              <Text style={styles.goalProgress}>{stats.booksRead}/24 books</Text>
+          <View className={`${isDark ? 'bg-gray-900' : 'bg-gray-50'} rounded-xl p-4`}>
+            <View className="flex-row justify-between items-center mb-2">
+              <Text className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>2024 Reading Goal</Text>
+              <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stats.booksRead}/24 books</Text>
             </View>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: `${(stats.booksRead / 24) * 100}%` }]} />
+            <View className={`h-1.5 ${isDark ? 'bg-gray-700' : 'bg-gray-200'} rounded-full mb-1`}>
+              <View className="h-full bg-blue-500 rounded-full" style={{ width: `${(stats.booksRead / 24) * 100}%` }} />
             </View>
-            <Text style={styles.goalPercentage}>
+            <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               {Math.round((stats.booksRead / 24) * 100)}% complete
             </Text>
           </View>
         </View>
 
         {/* Menu Items */}
-        <View style={styles.menuContainer}>
-          {menuItems.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.menuItem}>
-              <View style={styles.menuItemLeft}>
-                <View style={[styles.menuIcon, { backgroundColor: `${item.color}20` }]}>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} mx-5 rounded-2xl mb-5 shadow-sm`}>
+          {menuItems.map((item, index) => (
+            <TouchableOpacity 
+              key={item.id} 
+              className={`flex-row justify-between items-center px-5 py-4 ${
+                index < menuItems.length - 1 ? `border-b ${isDark ? 'border-gray-700' : 'border-gray-100'}` : ''
+              }`}
+            >
+              <View className="flex-row items-center flex-1">
+                <View className="w-9 h-9 rounded-full justify-center items-center mr-3" style={{ backgroundColor: `${item.color}20` }}>
                   <Ionicons name={item.icon as any} size={20} color={item.color} />
                 </View>
-                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Text className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.label}</Text>
               </View>
-              <View style={styles.menuItemRight}>
+              <View className="flex-row items-center">
                 {item.badge && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>{item.badge}</Text>
+                  <View className="bg-red-500 rounded-full px-1.5 py-0.5 mr-2">
+                    <Text className="text-white text-xs font-semibold">{item.badge}</Text>
                   </View>
                 )}
                 <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
@@ -132,10 +135,10 @@ export default function ProfileScreen() {
         </View>
 
         {/* Theme Toggle */}
-        <View style={styles.themeContainer}>
-          <View style={styles.themeItem}>
-            <View style={styles.themeLeft}>
-              <View style={styles.themeIcon}>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} mx-5 rounded-2xl mb-5 shadow-sm`}>
+          <View className="flex-row justify-between items-center px-5 py-4">
+            <View className="flex-row items-center flex-1">
+              <View className={`w-9 h-9 rounded-full justify-center items-center mr-3 ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
                 <Ionicons 
                   name={isDark ? "moon" : "sunny"} 
                   size={20} 
@@ -143,14 +146,14 @@ export default function ProfileScreen() {
                 />
               </View>
               <View>
-                <Text style={styles.themeLabel}>Theme</Text>
-                <Text style={styles.themeSubtitle}>
+                <Text className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-900'} mb-0.5`}>Theme</Text>
+                <Text className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   Currently using {isDark ? 'dark' : 'light'} theme
                 </Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.themeButton} onPress={toggleTheme}>
-              <Text style={styles.themeButtonText}>
+            <TouchableOpacity className="bg-blue-500 px-4 py-2 rounded-lg" onPress={toggleTheme}>
+              <Text className="text-white text-xs font-semibold">
                 Switch to {isDark ? 'Light' : 'Dark'}
               </Text>
             </TouchableOpacity>
@@ -158,268 +161,16 @@ export default function ProfileScreen() {
         </View>
 
         {/* Logout */}
-        <View style={styles.logoutContainer}>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <View className="px-5 mb-8">
+          <TouchableOpacity 
+            className={`flex-row items-center justify-center ${isDark ? 'bg-gray-800' : 'bg-white'} py-4 rounded-2xl shadow-sm`} 
+            onPress={handleLogout}
+          >
             <Ionicons name="log-out-outline" size={20} color="#EF4444" />
-            <Text style={styles.logoutText}>Logout</Text>
+            <Text className="text-red-500 text-base font-semibold ml-2">Logout</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  profileSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#3B82F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 4,
-  },
-  userEmail: {
-    fontSize: 14,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginBottom: 2,
-  },
-  joinDate: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  editButton: {
-    padding: 8,
-  },
-  statsContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 16,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  statCard: {
-    width: '48%',
-    alignItems: 'center',
-    paddingVertical: 12,
-    marginBottom: 12,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3B82F6',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    textAlign: 'center',
-  },
-  goalContainer: {
-    backgroundColor: isDark ? '#111827' : '#F3F4F6',
-    borderRadius: 12,
-    padding: 16,
-  },
-  goalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  goalTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  goalProgress: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  progressBar: {
-    height: 6,
-    backgroundColor: isDark ? '#374151' : '#E5E7EB',
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#3B82F6',
-    borderRadius: 3,
-  },
-  goalPercentage: {
-    fontSize: 10,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  menuContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    marginHorizontal: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: isDark ? '#374151' : '#F3F4F6',
-  },
-  menuItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  menuIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  menuLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  menuItemRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  badge: {
-    backgroundColor: '#EF4444',
-    borderRadius: 10,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginRight: 8,
-  },
-  badgeText: {
-    color: 'white',
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  themeContainer: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    marginHorizontal: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  themeItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  themeLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  themeIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: isDark ? '#374151' : '#F3F4F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  themeLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 2,
-  },
-  themeSubtitle: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  themeButton: {
-    backgroundColor: '#3B82F6',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  themeButtonText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  logoutContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 32,
-  },
-  logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    paddingVertical: 16,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  logoutText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#EF4444',
-    marginLeft: 8,
-  },
-});
