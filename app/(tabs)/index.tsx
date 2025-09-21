@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   FlatList,
   Dimensions,
@@ -48,36 +47,35 @@ const personalizedBooks = [
 export default function HomeScreen() {
   const { isDark } = useTheme();
   const { user } = useAuth();
-  const styles = getStyles(isDark);
 
   const renderBookCard = ({ item }: { item: typeof personalizedBooks[0] }) => (
-    <TouchableOpacity style={styles.bookCard}>
-      <Image source={{ uri: item.coverUrl }} style={styles.bookCover} />
-      <View style={styles.bookInfo}>
-        <Text style={styles.bookTitle} numberOfLines={2}>
+    <TouchableOpacity className="w-36 mr-4">
+      <Image source={{ uri: item.coverUrl }} className="w-36 h-48 rounded-xl mb-2" />
+      <View className="flex-1">
+        <Text className={`text-sm font-semibold mb-1 leading-4 ${isDark ? 'text-white' : 'text-gray-800'}`} numberOfLines={2}>
           {item.title}
         </Text>
-        <Text style={styles.bookAuthor} numberOfLines={1}>
+        <Text className={`text-xs mb-1.5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} numberOfLines={1}>
           by {item.author}
         </Text>
-        <View style={styles.ratingContainer}>
+        <View className="flex-row items-center">
           <Ionicons name="star" size={14} color="#F59E0B" />
-          <Text style={styles.rating}>{item.rating}</Text>
+          <Text className={`text-xs ml-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{item.rating}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className={`flex-1 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.header}>
+        <View className="flex-row justify-between items-center px-5 py-4">
           <View>
-            <Text style={styles.greeting}>Good morning,</Text>
-            <Text style={styles.userName}>{user?.name || 'Reader'}</Text>
+            <Text className={`text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Good morning,</Text>
+            <Text className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{user?.name || 'Reader'}</Text>
           </View>
-          <TouchableOpacity style={styles.profileButton}>
+          <TouchableOpacity className="p-1">
             <Ionicons name="person-circle" size={32} color="#3B82F6" />
           </TouchableOpacity>
         </View>
@@ -85,32 +83,32 @@ export default function HomeScreen() {
         {/* Hero Section */}
         <LinearGradient
           colors={['#3B82F6', '#8B5CF6', '#6366F1']}
-          style={styles.heroSection}
+          className="mx-5 rounded-2xl p-6 mb-8"
         >
-          <View style={styles.heroContent}>
-            <Text style={styles.heroTitle}>
+          <View className="items-start">
+            <Text className="text-3xl font-bold text-white mb-3">
               Discover Your Next{'\n'}
-              <Text style={styles.heroHighlight}>Great Read</Text>
+              <Text className="text-yellow-200">Great Read</Text>
             </Text>
-            <Text style={styles.heroSubtitle}>
+            <Text className="text-base text-white/80 mb-5 leading-6">
               Get personalized book recommendations powered by AI
             </Text>
-            <TouchableOpacity style={styles.exploreButton}>
-              <Text style={styles.exploreButtonText}>Start Exploring</Text>
+            <TouchableOpacity className="bg-white flex-row items-center px-5 py-3 rounded-xl">
+              <Text className="text-indigo-600 font-semibold mr-2">Start Exploring</Text>
               <Ionicons name="chevron-forward" size={20} color="#6366F1" />
             </TouchableOpacity>
           </View>
         </LinearGradient>
 
         {/* Recommended for You */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleContainer}>
+        <View className="mb-8">
+          <View className="flex-row justify-between items-center px-5 mb-4">
+            <View className="flex-row items-center">
               <Ionicons name="sparkles" size={24} color="#8B5CF6" />
-              <Text style={styles.sectionTitle}>Recommended for You</Text>
+              <Text className={`text-xl font-bold ml-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>Recommended for You</Text>
             </View>
             <TouchableOpacity>
-              <Text style={styles.viewAllText}>View all</Text>
+              <Text className="text-blue-500 font-semibold">View all</Text>
             </TouchableOpacity>
           </View>
 
@@ -120,19 +118,19 @@ export default function HomeScreen() {
             keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.booksList}
+            contentContainerStyle={{ paddingLeft: 20 }}
           />
         </View>
 
         {/* Trending Now */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleContainer}>
+        <View className="mb-8">
+          <View className="flex-row justify-between items-center px-5 mb-4">
+            <View className="flex-row items-center">
               <Ionicons name="trending-up" size={24} color="#F59E0B" />
-              <Text style={styles.sectionTitle}>Trending Now</Text>
+              <Text className={`text-xl font-bold ml-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>Trending Now</Text>
             </View>
             <TouchableOpacity>
-              <Text style={styles.viewAllText}>View all</Text>
+              <Text className="text-blue-500 font-semibold">View all</Text>
             </TouchableOpacity>
           </View>
 
@@ -142,25 +140,25 @@ export default function HomeScreen() {
             keyExtractor={(item) => `trending-${item.id}`}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.booksList}
+            contentContainerStyle={{ paddingLeft: 20 }}
           />
         </View>
 
         {/* Reading Stats */}
-        <View style={styles.statsSection}>
-          <Text style={styles.statsTitle}>Your Reading Journey</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>24</Text>
-              <Text style={styles.statLabel}>Books Read</Text>
+        <View className={`${isDark ? 'bg-gray-800' : 'bg-white'} mx-5 rounded-2xl p-6 mb-8 shadow-sm`}>
+          <Text className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Your Reading Journey</Text>
+          <View className="flex-row justify-between">
+            <View className="items-center flex-1">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">24</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Books Read</Text>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>8</Text>
-              <Text style={styles.statLabel}>Currently Reading</Text>
+            <View className="items-center flex-1">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">8</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Currently Reading</Text>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statNumber}>156</Text>
-              <Text style={styles.statLabel}>Want to Read</Text>
+            <View className="items-center flex-1">
+              <Text className="text-2xl font-bold text-blue-500 mb-1">156</Text>
+              <Text className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Want to Read</Text>
             </View>
           </View>
         </View>
@@ -168,159 +166,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: isDark ? '#111827' : '#F9FAFB',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  greeting: {
-    fontSize: 16,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-  },
-  profileButton: {
-    padding: 4,
-  },
-  heroSection: {
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 24,
-    marginBottom: 32,
-  },
-  heroContent: {
-    alignItems: 'flex-start',
-  },
-  heroTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 12,
-  },
-  heroHighlight: {
-    color: '#FDE68A',
-  },
-  heroSubtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: 20,
-    lineHeight: 24,
-  },
-  exploreButton: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 12,
-  },
-  exploreButtonText: {
-    color: '#6366F1',
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
-  sectionTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginLeft: 8,
-  },
-  viewAllText: {
-    color: '#3B82F6',
-    fontWeight: '600',
-  },
-  booksList: {
-    paddingLeft: 20,
-  },
-  bookCard: {
-    width: 140,
-    marginRight: 16,
-  },
-  bookCover: {
-    width: 140,
-    height: 200,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  bookInfo: {
-    flex: 1,
-  },
-  bookTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 4,
-    lineHeight: 18,
-  },
-  bookAuthor: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginBottom: 6,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rating: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    marginLeft: 4,
-  },
-  statsSection: {
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 24,
-    marginBottom: 32,
-  },
-  statsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: isDark ? '#FFFFFF' : '#1F2937',
-    marginBottom: 16,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statCard: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3B82F6',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: isDark ? '#9CA3AF' : '#6B7280',
-    textAlign: 'center',
-  },
-});

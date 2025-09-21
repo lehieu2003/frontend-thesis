@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -46,31 +45,29 @@ export default function RegisterScreen() {
     }
   };
 
-  const styles = getStyles(isDark);
-
   return (
     <KeyboardAvoidingView 
-      style={styles.container} 
+      className="flex-1" 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <LinearGradient
         colors={['#8B5CF6', '#3B82F6', '#6366F1']}
-        style={styles.gradient}
+        className="flex-1"
       >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <View style={styles.header}>
-            <View style={styles.iconContainer}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 20 }}>
+          <View className="items-center mb-10">
+            <View className="w-16 h-16 rounded-full bg-white/20 justify-center items-center mb-4">
               <Ionicons name="book" size={32} color="white" />
             </View>
-            <Text style={styles.title}>Create account</Text>
-            <Text style={styles.subtitle}>Join our community of book lovers</Text>
+            <Text className="text-3xl font-bold text-white mb-2">Create account</Text>
+            <Text className="text-base text-white/80">Join our community of book lovers</Text>
           </View>
 
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
-              <Ionicons name="person" size={20} color="#9CA3AF" style={styles.inputIcon} />
+          <View className="bg-white rounded-2xl p-6 shadow-lg">
+            <View className="flex-row items-center border border-gray-200 rounded-xl mb-4 px-4 py-3">
+              <Ionicons name="person" size={20} color="#9CA3AF" style={{ marginRight: 12 }} />
               <TextInput
-                style={styles.input}
+                className="flex-1 text-base text-gray-800"
                 placeholder="Enter your full name"
                 placeholderTextColor="#9CA3AF"
                 value={formData.name}
@@ -78,10 +75,10 @@ export default function RegisterScreen() {
               />
             </View>
 
-            <View style={styles.inputContainer}>
-              <Ionicons name="mail" size={20} color="#9CA3AF" style={styles.inputIcon} />
+            <View className="flex-row items-center border border-gray-200 rounded-xl mb-4 px-4 py-3">
+              <Ionicons name="mail" size={20} color="#9CA3AF" style={{ marginRight: 12 }} />
               <TextInput
-                style={styles.input}
+                className="flex-1 text-base text-gray-800"
                 placeholder="Enter your email"
                 placeholderTextColor="#9CA3AF"
                 value={formData.email}
@@ -91,10 +88,10 @@ export default function RegisterScreen() {
               />
             </View>
 
-            <View style={styles.inputContainer}>
-              <Ionicons name="lock-closed" size={20} color="#9CA3AF" style={styles.inputIcon} />
+            <View className="flex-row items-center border border-gray-200 rounded-xl mb-4 px-4 py-3">
+              <Ionicons name="lock-closed" size={20} color="#9CA3AF" style={{ marginRight: 12 }} />
               <TextInput
-                style={[styles.input, { flex: 1 }]}
+                className="flex-1 text-base text-gray-800"
                 placeholder="Create a password"
                 placeholderTextColor="#9CA3AF"
                 value={formData.password}
@@ -103,7 +100,7 @@ export default function RegisterScreen() {
               />
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
-                style={styles.eyeIcon}
+                className="p-1"
               >
                 <Ionicons 
                   name={showPassword ? "eye-off" : "eye"} 
@@ -113,10 +110,10 @@ export default function RegisterScreen() {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.inputContainer}>
-              <Ionicons name="lock-closed" size={20} color="#9CA3AF" style={styles.inputIcon} />
+            <View className="flex-row items-center border border-gray-200 rounded-xl mb-4 px-4 py-3">
+              <Ionicons name="lock-closed" size={20} color="#9CA3AF" style={{ marginRight: 12 }} />
               <TextInput
-                style={styles.input}
+                className="flex-1 text-base text-gray-800"
                 placeholder="Confirm your password"
                 placeholderTextColor="#9CA3AF"
                 value={formData.confirmPassword}
@@ -126,19 +123,19 @@ export default function RegisterScreen() {
             </View>
 
             <TouchableOpacity
-              style={styles.registerButton}
+              className="bg-purple-500 rounded-xl py-4 items-center mt-2 mb-6"
               onPress={handleRegister}
               disabled={isLoading}
             >
-              <Text style={styles.registerButtonText}>
+              <Text className="text-white text-base font-semibold">
                 {isLoading ? 'Creating account...' : 'Create account'}
               </Text>
             </TouchableOpacity>
 
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>Already have an account? </Text>
+            <View className="flex-row justify-center items-center">
+              <Text className="text-gray-500 text-sm">Already have an account? </Text>
               <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
-                <Text style={styles.linkText}>Sign in</Text>
+                <Text className="text-purple-500 text-sm font-semibold">Sign in</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -147,98 +144,3 @@ export default function RegisterScreen() {
     </KeyboardAvoidingView>
   );
 }
-
-const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  gradient: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  form: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#1F2937',
-  },
-  eyeIcon: {
-    padding: 4,
-  },
-  registerButton: {
-    backgroundColor: '#8B5CF6',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  registerButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerText: {
-    color: '#6B7280',
-    fontSize: 14,
-  },
-  linkText: {
-    color: '#8B5CF6',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-});

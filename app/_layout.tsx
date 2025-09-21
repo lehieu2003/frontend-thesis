@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import '../global.css';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
